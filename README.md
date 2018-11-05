@@ -1,5 +1,6 @@
-#Ansible
-##一、简介
+Ansible
+
+一、简介
 
 Ansible is a radically simple configuration-management, application deployment, task-execution, and multinode orchestration engine.
 
@@ -17,12 +18,13 @@ Design Principles
 
 
 
-
-##二、安装
+---
+二、安装
 
 ansible依赖于Python 2.6或更高的版本、paramiko、PyYAML及Jinja2。
 
-###2.1 编译安装
+
+2.1 编译安装
 
 解决依赖关系
 
@@ -34,13 +36,15 @@ ansible依赖于Python 2.6或更高的版本、paramiko、PyYAML及Jinja2。
       mkdir /etc/ansible
       cp -r examples/* /etc/ansible
 
-###2.2 rpm包安装
+
+2.2 rpm包安装
       yum install ansible
 
 注意：不同版本的ansible的功能差异可能较大。
 
 
-##三、简单应用
+---
+三、简单应用
 
 ansible通过ssh实现配置管理、应用部署、任务执行等功能，因此，需要事先配置ansible端能基于密钥认证的方式联系各被管理节点。
 
@@ -59,11 +63,12 @@ ansible通过ssh实现配置管理、应用部署、任务执行等功能，因�
 
 
 
+---
+
+四、YAML
 
 
-##四、YAML
-
-###4.1 YAML介绍
+4.1 YAML介绍
 
 YAML是一个可读性高的用来表达资料序列的格式。YAML参考了其他多种语言，包括：XML、C语言、Python、Perl以及电子邮件格式RFC2822等。Clark Evans在2001年在首次发表了这种语言，另外Ingy döt Net与Oren Ben-Kiki也是这语言的共同设计者。
 
@@ -79,7 +84,8 @@ YAML Ain't Markup Language，即YAML不是XML。不过，在开发的这种语�
 
 
 
-###4.2 YAML语法
+
+4.2 YAML语法
 
 YAML的语法和其他高阶语言类似，并且可以简单表达清单、散列表、标量等数据结构。其结构（Structure）通过空格来展示，序列（Sequence）里的项用"-"来代表，Map里的键值对用":"分隔。下面是一个示例。
 
@@ -100,7 +106,8 @@ children:
 
 YAML文件扩展名通常为.yaml，如example.yaml。
 
-####4.2.1 list
+
+4.2.1 list
 
 列表的所有元素均使用“-”打头，例如：
     A list of tasty fruits
@@ -110,9 +117,10 @@ YAML文件扩展名通常为.yaml，如example.yaml。
         - Strawberry
         - Mango
 
-####4.2.2 dictionary
+4.2.2 dictionary
 
 字典通过key与value进行标识，例如：
+
 ---
 An employee record
 
@@ -123,6 +131,7 @@ job: Developer
 skill: Elite
 
 也可以将key:value放置于{}中进行表示，例如：
+
 ---
 
  An employee record
@@ -130,22 +139,26 @@ skill: Elite
 {name: Example Developer, job: Developer, skill: Elite}
 
 
+---
+五、Ansible基础元素
 
-##五、Ansible基础元素
 
-###5.1 变量
+5.1 变量
 
-####5.1.1 变量命名
+
+5.1.1 变量命名
 
 变量名仅能由字母、数字和下划线组成，且只能以字母开头。
 
-###5.1.2 facts
+
+
+5.1.2 facts
 
 facts是由正在通信的远程目标主机发回的信息，这些信息被保存在ansible变量中。要获取指定的远程主机所支持的所有facts，可使用如下命令进行：
 
     ansible hostname -m setup
 
-####5.1.3 register
+5.1.3 register
 
 把任务的输出定义为变量，然后用于其他任务，示例如下:
 
@@ -154,13 +167,13 @@ facts是由正在通信的远程目标主机发回的信息，这些信息被保
        register: foo_result
        ignore_errors: True
 
-####5.1.4 通过命令行传递变量
+5.1.4 通过命令行传递变量
 
 在运行playbook的时候也可以传递一些变量供playbook使用，示例如下：
 
 	ansible-playbook test.yml --extra-vars "hosts=www user=mageedu"
 
-####5.1.5 通过roles传递变量
+5.1.5 通过roles传递变量
 
 当给一个主机应用角色的时候可以传递变量，然后在角色内使用这些变量，示例如下：
 
@@ -170,13 +183,13 @@ facts是由正在通信的远程目标主机发回的信息，这些信息被保
 	    - { role: foo_app_instance, dir: '/web/htdocs/a.com',  port: 8080 }
 
 
-###5.2 Inventory
+5.2 Inventory
 
 ansible的主要功用在于批量主机操作，为了便捷地使用其中的部分主机，可以在inventory file中将其分组命名。默认的inventory file为/etc/ansible/hosts。
 
 inventory file可以有多个，且也可以通过Dynamic Inventory来动态生成。
 
-####5.2.1 inventory文件格式
+5.2.1 inventory文件格式
 
 inventory文件遵循INI文件风格，中括号中的字符为组名。可以将同一个主机同时归并到多个不同的组中；此外，当如若目标主机使用了非默认的SSH端口，还可以在主机名称之后使用冒号加端口号来标明。
 
@@ -199,7 +212,8 @@ inventory文件遵循INI文件风格，中括号中的字符为组名。可以�
     [databases]
     db-[a:f].example.com
 
-####5.2.2 主机变量
+5.2.2 主机变量
+
 
 可以在inventory中定义主机时为其添加主机变量以便于在playbook中使用。例如：
 
@@ -207,7 +221,7 @@ inventory文件遵循INI文件风格，中括号中的字符为组名。可以�
     www1.magedu.com http_port=80 maxRequestsPerChild=808
     www2.magedu.com http_port=8080 maxRequestsPerChild=909
 
-###5.2.3 组变量
+5.2.3 组变量
 
 组变量是指赋予给指定组内所有主机上的在playboo中可用的变量。例如：
 
@@ -219,7 +233,7 @@ inventory文件遵循INI文件风格，中括号中的字符为组名。可以�
     ntp_server=ntp.magedu.com
     nfs_server=nfs.magedu.com
 
-####5.2.4 组嵌套
+5.2.4 组嵌套
 
 inventory中，组还可以包含其它的组，并且也可以向组中的主机指定变量。不过，这些变量只能在ansible-playbook中使用，而ansible不支持。例如：
 
@@ -238,7 +252,7 @@ inventory中，组还可以包含其它的组，并且也可以向组中的主�
     [webservers:vars]
     ntp_server=ntp.magedu.com
 
-####5.2.5 inventory参数
+5.2.5 inventory参数
 
 ansible基于ssh连接inventory中指定的远程主机时，还可以通过参数指定其交互方式；这些参数如下所示：
 
@@ -268,11 +282,11 @@ ansible基于ssh连接inventory中指定的远程主机时，还可以通过参�
         Works for anything such as ruby or perl and works just like ansible_python_interpreter.
         This replaces shebang of modules which will run on that host.
 
-###5.3 条件测试
+5.3 条件测试
 
 如果需要根据变量、facts或此前任务的执行结果来做为某task执行与否的前提时要用到条件测试。
 
-####5.3.1 when语句
+5.3.1 when语句
 
 在task后添加when子句即可使用条件测试；when语句支持Jinja2表达式语法。例如：
 
@@ -296,7 +310,7 @@ when语句中还可以使用Jinja2的大多“filter”，例如要忽略此前�
 
 此外，when语句中还可以使用facts或playbook中定义的变量。
 
-###5.4 迭代
+5.4 迭代
 
 当有需要重复性执行的任务时，可以使用迭代机制。其使用格式为将需要迭代的内容定义为item变量引用，并通过with_items语句来指明迭代的元素列表即可。例如：
 
@@ -327,8 +341,8 @@ ansible的循环机制还有更多的高级功能，具体请参见官方文档�
 
 
 
-
-#七、ansible playbooks
+---
+七、ansible playbooks
 
 playbook是由一个或多个“play”组成的列表。play的主要功能在于将事先归并为一组的主机装扮成事先通过ansible中的task定义好的角色。从根本上来讲，所谓task无非是调用ansible的一个module。将多个play组织在一个playbook中，即可以让它们联同起来按事先编排的机制同唱一台大戏。下面是一个简单示例。
 
@@ -346,9 +360,9 @@ playbook是由一个或多个“play”组成的列表。play的主要功能在�
 	    - name: restart apache
 	      service: name=httpd state=restarted
 
-###7.1 playbook基础组件
+7.1 playbook基础组件
 
-###7.1.1 Hosts和Users
+7.1.1 Hosts和Users
 	
 	playbook中的每一个play的目的都是为了让某个或某些主机以某个指定的用户身份执行任务。hosts用于指定要执行指定任务的主机，其可以是一个或多个由冒号分隔主机组；remote_user则用于指定远程主机上的执行任务的用户。如上面示例中的
 		-hosts: webnodes
@@ -364,7 +378,7 @@ playbook是由一个或多个“play”组成的列表。play的主要功能在�
 		      remote_user: mageedu
 		      sudo: yes
 
-####7.1.2 任务列表和action
+7.1.2 任务列表和action
 
 	play的主体部分是task list。task list中的各任务按次序逐个在hosts中指定的所有主机上执行，即在所有主机上完成第一个任务后再开始第二个。在运行自下而下某playbook时，如果中途发生错误，所有已执行任务都将回滚，因此，在更正playbook后重新执行一次即可。
 
@@ -393,7 +407,7 @@ playbook是由一个或多个“play”组成的列表。play的主要功能在�
 			    shell: /usr/bin/somecommand
 			    ignore_errors: True		
 
-####7.1.3 handlers
+7.1.3 handlers
 	
 	用于当关注的资源发生变化时采取一定的操作。
 
@@ -435,8 +449,9 @@ playbook是由一个或多个“play”组成的列表。play的主要功能在�
 	  	  service: name=heartbeat state=restarted
 
 
+---
+八、roles
 
-##八、roles
 
 ansilbe自1.2版本引入的新特性，用于层次性、结构化地组织playbook。roles能够根据层次型结构自动装载变量文件、tasks以及handlers等。要使用roles只需要在playbook中使用include指令即可。简单来讲，roles就是通过分别将变量、文件、任务、模板及处理器放置于单独的目录中，并可以便捷地include它们的一种机制。角色一般用于基于主机构建服务的场景中，但也可以是用于构建守护进程等场景中。
 
@@ -484,14 +499,14 @@ ansilbe自1.2版本引入的新特性，用于层次性、结构化地组织play
 	    - { role: some_role, when: "ansible_os_family == 'RedHat'" }
 
 
-###8.1 创建role的步骤
+8.1 创建role的步骤
 
 	(1) 创建以roles命名的目录；
 	(2) 在roles目录中分别创建以各角色名称命名的目录，如webservers等；
 	(3) 在每个角色命名的目录中分别创建files、handlers、meta、tasks、templates和vars目录；用不到的目录可以创建为空目录，也可以不创建；
 	(4) 在playbook文件中，调用各角色；
 
-###8.2 role内各目录中可用的文件
+8.2 role内各目录中可用的文件
 
 	tasks目录：至少应该包含一个名为main.yml的文件，其定义了此角色的任务列表；此文件可以使用include包含其它的位于此目录中的task文件；
 	files目录：存放由copy或script等模块调用的文件；
@@ -501,16 +516,16 @@ ansilbe自1.2版本引入的新特性，用于层次性、结构化地组织play
 	meta目录：应当包含一个main.yml文件，用于定义此角色的特殊设定及其依赖关系；ansible 1.3及其以后的版本才支持；
 	default目录：为当前角色设定默认变量时使用此目录；应当包含一个main.yml文件；
 
-
-##九、Tags
+---
+九、Tags
 
 tags用于让用户选择运行playbook中的部分代码。ansible具有幂等性，因此会自动跳过没有变化的部分，即便如此，有些代码为测试其确实没有发生变化的时间依然会非常地长。此时，如果确信其没有变化，就可以通过tags跳过此些代码片断。
 
 
+---
+十、Jinja2相关
 
-##十、Jinja2相关
-
-###10.1 字面量
+10.1 字面量
 	表达式最简单的形式就是字面量。字面量表示诸如字符串和数值的 Python 对象。下面 的字面量是可用的:
 
 	“Hello World”:
@@ -538,7 +553,7 @@ tags用于让用户选择运行playbook中的部分代码。ansible具有幂等�
 	true / false:
 	true 永远是 true ，而 false 始终是 false 。
 
-###10.2 算术运算
+10.2 算术运算
 
 Jinja 允许你用计算值。这在模板中很少用到，但是为了完整性允许其存在。支持下面的 运算符:
 
@@ -557,7 +572,7 @@ Jinja 允许你用计算值。这在模板中很少用到，但是为了完整�
 	**
 		取左操作数的右操作数次幂。 {{ 2**3 }} 会返回 8 。
 
-###10.3 比较操作符
+10.3 比较操作符
 
 	==
 		比较两个对象是否相等。
@@ -572,7 +587,7 @@ Jinja 允许你用计算值。这在模板中很少用到，但是为了完整�
 	<=
 		如果左边小于等于右边，返回 true 。
 
-###10.4 逻辑运算符
+10.4 逻辑运算符
 
 对于 if 语句，在 for 过滤或 if 表达式中，它可以用于联合多个表达式:
 
