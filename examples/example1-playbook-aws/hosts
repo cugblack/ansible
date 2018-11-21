@@ -1,0 +1,4 @@
+[test]
+k8smaster        ansible_host=192.168.0.11
+[test:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -i /root/.ssh/20181122.pem  -W %h:%p ubuntu@192.168.0.11"'

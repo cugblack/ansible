@@ -1,0 +1,7 @@
+- hosts: develop
+  gather_facts: "no"
+  remote_user: ubuntu
+  roles:
+    - test
+  tags:
+    - test

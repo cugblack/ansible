@@ -1,0 +1,35 @@
+---
+- name: "Stop apache2 server"
+  service: name=apache2 state=stopped
+- name: "Stop cron server"
+  service: name=cron state=stopped
+
+- name: "copy commit id"
+  copy: src=commitid dest=/srv/www/test/
+
+- name: "execute the shell script"
+  shell: bash /srv/www/start.sh
+
+- name: "Change /srv/www/test/ mode bits"
+  file:
+    path: /srv/www/test
+    owner: ubuntu
+    group: ubuntu
+    recurse: "yes"
+- name: "Chmod 0777 for  runtime(s) directory"
+  file:
+    path: "{{ item }}"
+    recurse: "yes"
+    mode: "0777"
+    owner: root
+    group: root
+  with_items:
+    - /srv/www/test
+- name: "定时任务"
+  cron:
+    name: async-file
+    job: "cd /srv/www/test/ && sh start.sh"
+    hour: "1"
+    minute: "30"
+    weekday: "*"
+    state: present
