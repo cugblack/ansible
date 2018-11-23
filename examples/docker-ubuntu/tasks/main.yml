@@ -16,7 +16,7 @@
     state: present
 - name: Add Docker repository and update apt cache
   apt_repository:
-    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
     update_cache: "yes"
     state: present
 - name: Install (or update) docker package
