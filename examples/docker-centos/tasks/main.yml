@@ -1,7 +1,6 @@
 - name: install dependance
   yum:
     name: {{ item }}
-    force: "yes"
     state: present
     update_cache: "no"
   with_items:
@@ -12,7 +11,7 @@
   rpm_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
-- name: Add Docker repository and update apt cache
+- name: Add Docker repository
   yum_repository:
     name: docker
     baseurl: https://download.docker.com/linux/centos/docker-ce.repo
