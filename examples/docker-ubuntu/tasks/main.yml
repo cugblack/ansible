@@ -20,7 +20,7 @@
     update_cache: "yes"
     state: present
 - name: Install (or update) docker package
-  apt:
+  yum:
     name: docker-ce=18.03.0~ce-0~ubuntu
     force: "yes"
     state: present
