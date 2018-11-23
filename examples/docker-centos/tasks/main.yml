@@ -1,0 +1,30 @@
+- name: install dependance
+  yum:
+    name: {{ item }}
+    force: "yes"
+    state: present
+    update_cache: "no"
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+- name: Import Docker repository key
+  apt_key:
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+- name: Add Docker repository and update apt cache
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    update_cache: "yes"
+    state: present
+- name: Install (or update) docker package
+  apt:
+    name: docker-ce=18.03.0~ce-0~ubuntu
+    force: "yes"
+    state: present
+    update_cache: "no"
+- name: Stop docker
+  service: name=docker state=stopped
+- name: Start docker
+  service: name=docker state=started
